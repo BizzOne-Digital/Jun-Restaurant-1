@@ -264,12 +264,16 @@ export async function createStripeCheckoutSession(
    * Destination charge: platform creates the charge, application_fee_amount (12%) stays on
    * the platform account, and the remainder (88%) is immediately transferred to the
    * connected restaurant account via transfer_data.destination.
+   * on_behalf_of makes the connected account the settlement merchant so the restaurant
+   * name (Ono Poke Bar) appears in the Stripe Dashboard transactions list instead of
+   * the platform name.
    * Commission rate and account ID are hardcoded in lib/payment-config.ts — not editable
    * from the admin portal.
    */
   const paymentIntentData: Stripe.Checkout.SessionCreateParams.PaymentIntentData = {
     application_fee_amount: platformFeeAmount,
     transfer_data: { destination: connectedAccountId },
+    on_behalf_of: connectedAccountId,
     metadata: {
       ...metadata,
       connectedAccountId,
