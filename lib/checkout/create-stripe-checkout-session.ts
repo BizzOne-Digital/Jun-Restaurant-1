@@ -274,6 +274,13 @@ export async function createStripeCheckoutSession(
     application_fee_amount: platformFeeAmount,
     transfer_data: { destination: connectedAccountId },
     on_behalf_of: connectedAccountId,
+    /**
+     * statement_descriptor_suffix appears on the customer's bank/card statement alongside
+     * the connected account's statement descriptor, e.g. "ONO POKE BAR * WEST LOCATION".
+     * Max 22 chars, alphanumeric + hyphens only (Stripe rule).
+     * "onopokebar-westlocation" = 23 chars (too long) → trimmed to "onopokebar-west" (15 chars).
+     */
+    statement_descriptor_suffix: "onopokebar-west",
     metadata: {
       ...metadata,
       connectedAccountId,
